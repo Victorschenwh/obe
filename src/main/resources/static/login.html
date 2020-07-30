@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:v-model="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet"
+          href="/css/bootstrap.min.css"
+    >
+    <!-- jquery.js -->
+    <script src="/js/jquery.js"></script>
+    <!-- vue.js -->
+    <script src="/js/vue.js"></script>
+    <!-- vue.js -->
+    <!-- <script src="https://unpkg.com/vue/dist/vue.js"></script> -->
+    <!-- vue-resource.min.js -->
+    <script
+            src="/js/vue-resource.min.js"></script>
+    <!-- vue-router.js -->
+    <script src="/js/vue-router.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script
+            src="/js/bootstrap.min.js"
+    ></script>
+    <title>登录</title>
+</head>
+<style>
+    .mar {
+        margin-top: 200px;
+    }
+</style>
+<body class="bg-info">
+<div id="page">
+    <div class="container">
+        <div class="row mar">
+            <div class="col-md-offset-4 col-md-4 col-lg-offset-4 col-lg-4 form">
+                <form>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="control-label sr-only">学号或用户名</label>
+                        <input type="text" class="form-control" id="inputEmail3" placeholder="学号或用户名"
+                               v-model:value="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="sr-only control-label">密码</label>
+                        <input type="password" class="form-control" id="inputPassword3" placeholder="密码"
+                               v-model:value="password">
+                    </div>
+                    <div class="form-group">
+                        <label class="radio-inline">
+                            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0" v-model="select">
+                            学生
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1" v-model="select">
+                            管理员
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default" @click="login">登录</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    //设置页面baseURL
+    Vue.http.options.root = 'http://127.0.0.1/';
+    var page = new Vue({
+        el: '#page',
+        data: {
+            select: null,
+            password: null,
+            username: null
+        },
+        methods: {
+            studentLogin: function () {
+                this.$http.get(
+                    'student/login?sno=' + this.username + "&password="
+                    + this.password
+                ).then(
+                    function (res) {
+                        if (res.body.code == 1) {
+                            //登录成功
+                            window.location.href = "/html/student/index.html";
+                        } else {
+                            //登陆失败,显示提示信息
+                            alert(res.body.msg)
+                        }
+                    },
+                    function () {
+                        console.log('请求失败处理');
+                    }
+                );
+            },
+            adminLogin: function () {
+                this.$http.get(
+                    'admin/login?username=' + this.username + "&password="
+                    + this.password
+                ).then(
+                    function (res) {
+                        if (res.body.code == 1) {
+                            //登录成功
+                            window.location.href = "/html/admin/index.html";
+                        } else {
+                            //登陆失败,显示提示信息
+                            alert(res.body.msg)
+                        }
+                    },
+                    function () {
+                        console.log('请求失败处理');
+                    }
+                );
+            },
+            login: function () {
+              /*  if (this.select == 0) {
+                    this.studentLogin();
+                } else {
+                    this.adminLogin();
+                }*/
+
+              window.location.href="/teacher";
+            }
+        },
+        watch: {}
+    })
+</script>
+</html>
