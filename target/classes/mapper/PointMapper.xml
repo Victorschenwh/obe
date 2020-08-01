@@ -39,4 +39,32 @@
       </if>
     </trim>
   </insert>
+
+  <select id="list" resultType="com.dbsy.obe.pojo.Point">
+    select * from point
+    <where>
+      <if test="name != null">
+        or name like concat('%',#{name},'%')
+      </if>
+    </where>
+    <if test="page!=null and pageSize != null">
+      limit (#{page}-1)* #{pageSize},#{pageSize}
+    </if>
+  </select>
+
+  <select id="listCount" resultType="int">
+    select count(*) from point
+    <where>
+      <if test="name != null">
+        or name like concat('%',#{name},'%')
+      </if>
+    </where>
+  </select>
+
+  <delete id="batchRemove">
+    delete from point where id in
+    <foreach item="id" collection="array" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
 </mapper>
