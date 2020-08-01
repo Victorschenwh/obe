@@ -23,7 +23,7 @@
                 </button>
             </div>
 
-            <table id="table_plan" data-mobile-responsive="true">
+            <table id="table_point" data-mobile-responsive="true">
             </table>
 
         </div>
@@ -46,32 +46,19 @@
 
                         <input id="id" name="id" class="hidden">
 
+
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">培养方案名称：</label>
+                            <label class="col-sm-3 control-label">观测点简介：</label>
                             <div class="col-sm-8">
-                                <input id="name" name="name" class="form-control" type="text" required>
+                                <input id="introduction" name="introduction" class="form-control" type="text" required>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">培养方案版本：</label>
-                            <div class="col-sm-8">
-                                <input id="year" name="year" class="form-control" type="text" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">培养目标简介：</label>
-                            <div class="col-sm-8">
-                                <input id="introduce" name="introduce" class="form-control" type="text" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">所属专业：</label>
+                            <label class="col-sm-3 control-label">毕业要求：</label>
                             <div class="col-sm-8">
                                 <!--<input id="gender" name="gender" class="form-control" type="text">-->
-                                <select id="majorId" name="majorId" class="form-control" required>
+                                <select id="requirementId" name="requirementId" class="form-control" required>
                                     <option value="">
                                         --请选择--
                                     </option>
@@ -108,38 +95,26 @@
                     </div>
                     <div class="modal-body">
 
+
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">培养方案名称：</label>
+                            <label class="col-sm-3 control-label">观测点简介：</label>
                             <div class="col-sm-8">
-                                <input name="name" class="form-control" type="text" required>
+                                <input name="introduction" class="form-control" type="text" required>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">培养方案版本：</label>
-                            <div class="col-sm-8">
-                                <input  name="year" class="form-control" type="text" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">培养方案介绍：</label>
-                            <div class="col-sm-8">
-                                <input name="introduce" class="form-control" type="text" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">所属专业：</label>
+                            <label class="col-sm-3 control-label">毕业要求：</label>
                             <div class="col-sm-8">
                                 <!--<input id="gender" name="gender" class="form-control" type="text">-->
-                                <select name="majorId" class="form-control" required>
+                                <select name="requirementId" class="form-control" required>
                                     <option value="">
                                         --请选择--
                                     </option>
                                 </select>
                             </div>
                         </div>
+
 
                     </div>
                     <div class="modal-footer">
@@ -178,11 +153,11 @@
                 insert();
             }
         });
-        //获取学院数据
+        //获取毕业要求数据
         $.ajax({
             //cache: true,
             type: "POST",
-            url: "/major/getAll",
+            url: "/requirement/getAll",
             data: {},
             success: function (data) {
                 if (data.code == 1) {
@@ -196,7 +171,7 @@
                             name.append(option);
                         }
                     }*/
-                    $("select[name='majorId']").each(function () {
+                    $("select[name='requirementId']").each(function () {
                         //$(this).text()
                         for (var i = 0; i < list.length; i++) {
                             var option = "<option value='" + list[i].id + "'>" + list[i].name + "</option>";
@@ -211,9 +186,9 @@
     });
 
     function load() {
-        $('#table_plan')
+        $('#table_point')
             .bootstrapTable({
-                url: "/plan/list",                      //请求后台的URL（*）
+                url: "/point/list",                      //请求后台的URL（*）
                 method: 'GET',                      //请求方式（*）
                 toolbar: '#toolbar',              //工具按钮用哪个容器
                 striped: true,                      //是否显示行间隔色
@@ -251,35 +226,29 @@
                 columns: [{
                     checkbox: true,
                     visible: true                  //是否显示复选框
+                },  {
+                    field: 'introduction',
+                    title: '观测点简介',
                 }, {
-                    field: 'name',
-                    title: '培养方案名称',
-                }, {
-                    field: 'year',
-                    title: '培养方案版本',
-                }, {
-                    field: 'introduce',
-                    title: '培养方案介绍',
-                }, {
-                    field: 'majorId',
-                    title: '专业名称名称',
+                    field: 'requirementId',
+                    title: '毕业要求名称',
                     formatter:function(value,row,index){
-                        var major={};
+                        var requirement={};
                         if(value!=null){
                             $.ajax({
                                 //cache: true,
                                 async:false,
                                 type: "POST",
-                                url: "/major/get/" + value,
+                                url: "/requirement/get/" + value,
                                 data: {},
                                 success: function (data) {
                                     if (data.code == 1) {
-                                        major=data.data;
+                                        requirement=data.data;
                                     }
                                 }
                             });
                         }
-                        return major.name;
+                        return requirement.synopsis;
                     }
                 }, {
                     title: '操作',
@@ -298,20 +267,20 @@
     }
 
     function reLoad() {
-        $('#table_plan').bootstrapTable('refresh');
+        $('#table_point').bootstrapTable('refresh');
     }
 
     function get(id) {
         $.ajax({
             //cache: true,
             type: "POST",
-            url: "/plan/get/" + id,
+            url: "/point/get/" + id,
             data: {},
             success: function (data) {
                 if (data.code == 1) {
-                    var plan = data.data;
-                    for (var key  in plan) {
-                        $("#" + key).val(plan[key]);
+                    var point = data.data;
+                    for (var key  in point) {
+                        $("#" + key).val(point[key]);
                     }
                 }
             }
@@ -323,7 +292,7 @@
         $.ajax({
             //cache: true,
             type: "POST",
-            url: "/plan/update",
+            url: "/point/update",
             data: $('#update').serialize(),
             success: function (data) {
                 if (data.code == 1) {
@@ -342,7 +311,7 @@
         $.ajax({
             //cache: true,
             type: "POST",
-            url: "/plan/insert",
+            url: "/point/insert",
             data: $('#insert').serialize(),
             success: function (data) {
                 if (data.code == 1) {
@@ -361,7 +330,7 @@
         $.ajax({
             type: 'POST',
             data: {},
-            url: "/plan/remove/" + id,
+            url: "/point/remove/" + id,
             dataType: "json",
             success: function (data) {
                 if (data.code == 1) {
@@ -375,7 +344,7 @@
     }
 
     function batchRemove() {
-        var rows = $('#table_plan').bootstrapTable('getSelections');
+        var rows = $('#table_point').bootstrapTable('getSelections');
         if (rows == null) {
             alert("请选中操作的行")
             return;
@@ -391,7 +360,7 @@
             data: {
                 ids: ids
             },
-            url: "/plan/batchRemove",
+            url: "/point/batchRemove",
             traditional: true,//向后台传递数组时加上
             dataType: "json",
             success: function (data) {
