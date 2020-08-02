@@ -10,7 +10,6 @@
     <div class="row">
         <div th:replace="menu::menu">
         </div>
-
         <!--页面主要代码放在这里-->
         <div class="col-md-9 col-md-offset-1">
             <iframe th:src="${'/' + path}" style="height: 500px;width: 100%;" frameborder="0" scrolling="no"
@@ -18,7 +17,6 @@
         </div>
 
     </div>
-
 
 </div>
 <div th:replace="static :: script"></div>
