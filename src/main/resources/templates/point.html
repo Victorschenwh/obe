@@ -4,31 +4,21 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div th:replace="top::top">
-    </div>
 
-    <div class="row">
-        <div th:replace="menu::menu">
+        <div id="toolbar" class="btn-group">
+            <button id="btn_add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>增加
+            </button>
+
+            <button id="btn_delete" type="button" class="btn btn-danger" onclick="batchRemove()">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>批量删除
+            </button>
         </div>
 
-        <!--页面主要代码放在这里-->
-        <div class="col-md-9 col-md-offset-1">
-            <div id="toolbar" class="btn-group">
-                <button id="btn_add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>增加
-                </button>
+        <table id="table_point" data-mobile-responsive="true">
+        </table>
 
-                <button id="btn_delete" type="button" class="btn btn-danger" onclick="batchRemove()">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>批量删除
-                </button>
-            </div>
 
-            <table id="table_point" data-mobile-responsive="true">
-            </table>
-
-        </div>
-
-    </div>
     <!--模态框-->
     <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -226,24 +216,24 @@
                 columns: [{
                     checkbox: true,
                     visible: true                  //是否显示复选框
-                },  {
+                }, {
                     field: 'introduction',
                     title: '观测点简介',
                 }, {
                     field: 'requirementId',
                     title: '毕业要求名称',
-                    formatter:function(value,row,index){
-                        var requirement={};
-                        if(value!=null){
+                    formatter: function (value, row, index) {
+                        var requirement = {};
+                        if (value != null) {
                             $.ajax({
                                 //cache: true,
-                                async:false,
+                                async: false,
                                 type: "POST",
                                 url: "/requirement/get/" + value,
                                 data: {},
                                 success: function (data) {
                                     if (data.code == 1) {
-                                        requirement=data.data;
+                                        requirement = data.data;
                                     }
                                 }
                             });

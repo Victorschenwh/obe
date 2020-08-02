@@ -4,31 +4,21 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div th:replace="top::top">
+
+
+    <div id="toolbar" class="btn-group">
+        <button id="btn_add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>增加
+        </button>
+
+        <button id="btn_delete" type="button" class="btn btn-danger" onclick="batchRemove()">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>批量删除
+        </button>
     </div>
 
-    <div class="row">
-        <div th:replace="menu::menu">
-        </div>
+    <table id="table_plan" data-mobile-responsive="true">
+    </table>
 
-        <!--页面主要代码放在这里-->
-        <div class="col-md-9 col-md-offset-1">
-            <div id="toolbar" class="btn-group">
-                <button id="btn_add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>增加
-                </button>
-
-                <button id="btn_delete" type="button" class="btn btn-danger" onclick="batchRemove()">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>批量删除
-                </button>
-            </div>
-
-            <table id="table_plan" data-mobile-responsive="true">
-            </table>
-
-        </div>
-
-    </div>
     <!--模态框-->
     <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -118,7 +108,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">培养方案版本：</label>
                             <div class="col-sm-8">
-                                <input  name="year" class="form-control" type="text" required>
+                                <input name="year" class="form-control" type="text" required>
                             </div>
                         </div>
 
@@ -263,18 +253,18 @@
                 }, {
                     field: 'majorId',
                     title: '专业名称名称',
-                    formatter:function(value,row,index){
-                        var major={};
-                        if(value!=null){
+                    formatter: function (value, row, index) {
+                        var major = {};
+                        if (value != null) {
                             $.ajax({
                                 //cache: true,
-                                async:false,
+                                async: false,
                                 type: "POST",
                                 url: "/major/get/" + value,
                                 data: {},
                                 success: function (data) {
                                     if (data.code == 1) {
-                                        major=data.data;
+                                        major = data.data;
                                     }
                                 }
                             });

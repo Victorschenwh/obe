@@ -4,31 +4,20 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div th:replace="top::top">
-    </div>
 
-    <div class="row">
-        <div th:replace="menu::menu">
+        <div id="toolbar" class="btn-group">
+            <button id="btn_add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>增加
+            </button>
+
+            <button id="btn_delete" type="button" class="btn btn-danger" onclick="batchRemove()">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>批量删除
+            </button>
         </div>
 
-        <!--页面主要代码放在这里-->
-        <div class="col-md-9 col-md-offset-1">
-            <div id="toolbar" class="btn-group">
-                <button id="btn_add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>增加
-                </button>
+        <table id="table_major" data-mobile-responsive="true">
+        </table>
 
-                <button id="btn_delete" type="button" class="btn btn-danger" onclick="batchRemove()">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>批量删除
-                </button>
-            </div>
-
-            <table id="table_major" data-mobile-responsive="true">
-            </table>
-
-        </div>
-
-    </div>
     <!--模态框-->
     <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -240,7 +229,7 @@
                 columns: [{
                     checkbox: true,
                     visible: true                  //是否显示复选框
-                },  {
+                }, {
                     field: 'id',
                     title: 'id',
                     width: 120,
@@ -257,37 +246,37 @@
                     {
                         field: 'departmentId',
                         title: '所属院系',
-                        formatter:function(value,row,index){
-                            var department={};
-                            if(value!=null){
+                        formatter: function (value, row, index) {
+                            var department = {};
+                            if (value != null) {
                                 $.ajax({
                                     //cache: true,
-                                    async:false,
+                                    async: false,
                                     type: "POST",
                                     url: "/department/get/" + value,
                                     data: {},
                                     success: function (data) {
                                         if (data.code == 1) {
-                                          department=data.data;
+                                            department = data.data;
                                         }
                                     }
                                 });
                             }
                             return department.name;
                         }
-                    },{
-                    title: '操作',
-                    field: 'id',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var e = '<a class="btn btn-primary btn-sm " href="#" mce_href="#"  data-toggle="modal" data-target="#edit" title="编辑" onclick="get(' + row.id + ')">编辑</a> ';
-                        var d = '<a class="btn btn-warning btn-sm " href="#" title="删除"  mce_href="#" onclick="remove(\''
-                            + row.id
-                            + '\')">删除</a> ';
+                    }, {
+                        title: '操作',
+                        field: 'id',
+                        align: 'center',
+                        formatter: function (value, row, index) {
+                            var e = '<a class="btn btn-primary btn-sm " href="#" mce_href="#"  data-toggle="modal" data-target="#edit" title="编辑" onclick="get(' + row.id + ')">编辑</a> ';
+                            var d = '<a class="btn btn-warning btn-sm " href="#" title="删除"  mce_href="#" onclick="remove(\''
+                                + row.id
+                                + '\')">删除</a> ';
 
-                        return e + d;
-                    }
-                }]
+                            return e + d;
+                        }
+                    }]
             });
     }
 
